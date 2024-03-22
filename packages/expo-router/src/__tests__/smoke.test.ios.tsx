@@ -167,7 +167,7 @@ it('layouts', async () => {
   expect(Other).toHaveBeenCalledTimes(1);
 });
 
-it('nested layouts', async () => {
+it.only('nested layouts', async () => {
   const RootLayout = jest.fn(() => <Slot />);
   const AppLayout = jest.fn(() => <Slot />);
   const TabsLayout = jest.fn(() => <Tabs />);

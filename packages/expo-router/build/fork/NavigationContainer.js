@@ -30,9 +30,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // https://github.com/react-navigation/react-navigation/blob/6.x/packages/native/src/NavigationContainer.tsx
 const core_1 = require("@react-navigation/core");
 const native_1 = require("@react-navigation/native");
-const useBackButton_1 = __importDefault(require("@react-navigation/native/src/useBackButton"));
-const useDocumentTitle_1 = __importDefault(require("@react-navigation/native/src/useDocumentTitle"));
-const useThenable_1 = __importDefault(require("@react-navigation/native/src/useThenable"));
+const useBackButton_1 = require("@react-navigation/native/src/useBackButton");
+const useDocumentTitle_1 = require("@react-navigation/native/src/useDocumentTitle");
+const useThenable_1 = require("@react-navigation/native/src/useThenable");
 const React = __importStar(require("react"));
 const useLinking_1 = __importDefault(require("./useLinking"));
 global.REACT_NAVIGATION_DEVTOOLS = new WeakMap();
@@ -56,8 +56,8 @@ function NavigationContainerInner({ theme = native_1.DefaultTheme, linking, fall
         (0, core_1.validatePathConfig)(linking.config);
     }
     const refContainer = React.useRef(null);
-    (0, useBackButton_1.default)(refContainer);
-    (0, useDocumentTitle_1.default)(refContainer, documentTitle);
+    (0, useBackButton_1.useBackButton)(refContainer);
+    (0, useDocumentTitle_1.useDocumentTitle)(refContainer, documentTitle);
     const { getInitialState } = (0, useLinking_1.default)(refContainer, {
         independent: rest.independent,
         enabled: isLinkingEnabled,
@@ -82,7 +82,7 @@ function NavigationContainerInner({ theme = native_1.DefaultTheme, linking, fall
             });
         }
     });
-    const [isResolved, initialState] = (0, useThenable_1.default)(getInitialState);
+    const [isResolved, initialState] = (0, useThenable_1.useThenable)(getInitialState);
     React.useImperativeHandle(ref, () => refContainer.current);
     const linkingContext = React.useMemo(() => ({ options: linking }), [linking]);
     const isReady = rest.initialState != null || !isLinkingEnabled || isResolved;

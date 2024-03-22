@@ -18,9 +18,9 @@ import {
   LinkingContext,
   Theme,
 } from '@react-navigation/native';
-import useBackButton from '@react-navigation/native/src/useBackButton';
-import useDocumentTitle from '@react-navigation/native/src/useDocumentTitle';
-import useThenable from '@react-navigation/native/src/useThenable';
+import { useBackButton } from '@react-navigation/native/src/useBackButton';
+import { useDocumentTitle } from '@react-navigation/native/src/useDocumentTitle';
+import { useThenable } from '@react-navigation/native/src/useThenable';
 import * as React from 'react';
 
 import useLinking from './useLinking';
@@ -144,12 +144,10 @@ function NavigationContainerInner(
   );
 }
 
-const NavigationContainer = React.forwardRef(NavigationContainerInner) as <
+export const NavigationContainer = React.forwardRef(NavigationContainerInner) as <
   RootParamList extends object = ReactNavigation.RootParamList,
 >(
   props: Props<RootParamList> & {
     ref?: React.Ref<NavigationContainerRef<RootParamList>>;
   }
 ) => React.ReactElement;
-
-export default NavigationContainer;

@@ -37,10 +37,12 @@ export const Tabs = withLayoutContext<
             }
             const children =
               Platform.OS === 'web' ? props.children : <Pressable>{props.children}</Pressable>;
+            // TODO: React Navigation types these props as Animated.WithAnimatedValue<StyleProp<ViewStyle>>
+            //       While Link expects a TextStyle. We need to reconcile these types.
             return (
               <Link
-                {...props}
-                style={[{ display: 'flex' }, props.style]}
+                {...(props as any)}
+                style={[{ display: 'flex' }, props.style as any]}
                 href={href}
                 asChild={Platform.OS !== 'web'}
                 children={children}

@@ -14,8 +14,10 @@ import { Link } from '../link/Link';
 // This is the only way to access the navigator.
 const BottomTabNavigator = createBottomTabNavigator().Navigator;
 
+type TabsProps = BottomTabNavigationOptions & { href?: ExpoRouter.Href | null };
+
 export const Tabs = withLayoutContext<
-  BottomTabNavigationOptions & { href?: ExpoRouter.Href | null },
+  TabsProps,
   typeof BottomTabNavigator,
   TabNavigationState<ParamListBase>,
   BottomTabNavigationEventMap
@@ -54,6 +56,6 @@ export const Tabs = withLayoutContext<
     }
     return screen;
   });
-});
+}) as React.FC<TabsProps>;
 
 export default Tabs;

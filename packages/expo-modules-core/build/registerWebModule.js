@@ -1,6 +1,9 @@
 // It is a no-op function that returns the module implementation.
-// Actual implementation is located in `createWebModule.web.ts`.
-export function registerWebModule(_moduleName, moduleImplementation) {
-    return moduleImplementation;
+export function registerWebModule(moduleName, moduleImplementation) {
+    if (globalThis.expo.modules[moduleName]) {
+        return globalThis.expo.modules[moduleName];
+    }
+    globalThis.expo.modules[moduleName] = new moduleImplementation();
+    return globalThis.expo.modules[moduleName];
 }
 //# sourceMappingURL=registerWebModule.js.map

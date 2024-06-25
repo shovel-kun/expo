@@ -141,7 +141,7 @@ export function useLinking(
           return url.then((url) => {
             const state = getStateFromURL(url);
 
-            if (typeof url === 'string') {
+            if (typeof url == 'string') {
               // If the link were handled, it gets cleared in NavigationContainer
               onUnhandledLinking(extractExpoPathFromURL(url));
             }

@@ -116,12 +116,8 @@ it('stacks should always push a new route', () => {
                   {
                     key: expect.any(String),
                     name: 'index',
-<<<<<<< HEAD
                     params: { id: '1' },
-=======
-                    params: {},
                     path: undefined,
->>>>>>> 84de81f5990 (fix errors)
                   },
                   {
                     key: expect.any(String),

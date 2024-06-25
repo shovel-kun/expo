@@ -17,7 +17,7 @@ import * as React from 'react';
 // createMemoryHistory is a self-contained module with no side effects any only depends on `nanoid` and `tiny-warning`
 // This was removed as we don't use ServerContext
 // import ServerContext from './ServerContext';
-import { ServerLocationContext } from '../global-state/serverLocationContext';
+import ServerLocationContext from '../global-state/serverLocationContext';
 
 /* End of fork */
 
@@ -146,9 +146,6 @@ export function useLinking(
     getActionFromStateRef.current = getActionFromState;
   });
 
-<<<<<<< HEAD
-  const server = React.useContext(ServerContext);
-=======
   const validateRoutesNotExistInRootState = React.useCallback(
     (state: ResultState) => {
       const navigation = ref.current;
@@ -161,7 +158,6 @@ export function useLinking(
   );
 
   const serverLocation = React.useContext(ServerLocationContext);
->>>>>>> 84de81f5990 (fix errors)
 
   const getInitialState = React.useCallback(() => {
     let value: ResultState | undefined;

@@ -11,7 +11,7 @@
 ### 🐛 Bug fixes
 
 - Fix server hosting root html in a group with a layout. ([#29948](https://github.com/expo/expo/pull/29948) by [@EvanBacon](https://github.com/EvanBacon))
-- Fix pushing multiple hashes on web.
+- Fix pushing multiple hashes on web. ([#29990](https://github.com/expo/expo/pull/29990) by [@marklawlor](https://github.com/marklawlor))
 
 ### 💡 Others
 

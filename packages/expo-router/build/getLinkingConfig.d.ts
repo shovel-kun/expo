@@ -1,22 +1,13 @@
 import { LinkingOptions } from '@react-navigation/native';
 import { RouteNode } from './Route';
-<<<<<<< HEAD
 import { getInitialURL, getPathFromState } from './link/linking';
 import { RequireContext } from './types';
 export declare function getNavigationConfig(routes: RouteNode, metaOnly?: boolean): {
-    initialRouteName: string | undefined;
-    screens: Record<string, import("./getReactNavigationConfig").Screen>;
-};
-export type ExpoLinkingOptions<T extends object = Record<string, unknown>> = LinkingOptions<T> & {
-=======
-import { getPathFromState } from './link/linking';
-export declare function getNavigationConfig(routes: RouteNode, metaOnly?: boolean): {
     path?: string | undefined;
-    screens: object;
-    initialRouteName?: undefined;
+    screens: import("@react-navigation/native").PathConfigMap<Record<string, unknown>>;
+    initialRouteName?: string | undefined;
 } | undefined;
-export type ExpoLinkingOptions = LinkingOptions<object> & {
->>>>>>> 84de81f5990 (fix errors)
+export type ExpoLinkingOptions<T extends object = Record<string, unknown>> = LinkingOptions<T> & {
     getPathFromState?: typeof getPathFromState;
 };
 export type LinkingConfigOptions = {

@@ -8,18 +8,11 @@ import '@expo/metro-runtime';
 import { Options } from '../getRoutes';
 import { ExpoRouterServerManifestV1 } from '../getServerManifest';
 /** Get the linking manifest from a Node.js process. */
-<<<<<<< HEAD
 declare function getManifest(options?: Options): Promise<{
-    initialRouteName: string | undefined;
-    screens: Record<string, import("../getReactNavigationConfig").Screen>;
-}>;
-=======
-declare function getManifest(options?: Parameters<typeof getRoutes>[1]): Promise<{
     path?: string | undefined;
-    screens: object;
-    initialRouteName?: undefined;
+    screens: import("@react-navigation/native").PathConfigMap<Record<string, unknown>>;
+    initialRouteName?: string | undefined;
 } | undefined>;
->>>>>>> 84de81f5990 (fix errors)
 /**
  * Get the server manifest with all dynamic routes loaded with `generateStaticParams`.
  * Unlike the `expo-router/src/routes-manifest.ts` method, this requires loading the entire app in-memory, which

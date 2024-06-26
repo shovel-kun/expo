@@ -34,7 +34,7 @@ const react_native_1 = require("react-native");
 const react_native_safe_area_context_1 = require("react-native-safe-area-context");
 const NavigationContainer_1 = require("./fork/NavigationContainer");
 const router_store_1 = require("./global-state/router-store");
-const serverContext_1 = __importDefault(require("./global-state/serverContext"));
+const serverLocationContext_1 = __importDefault(require("./global-state/serverLocationContext"));
 const statusbar_1 = require("./utils/statusbar");
 const Splash_1 = require("./views/Splash");
 const isTestEnv = process.env.NODE_ENV === 'test';
@@ -121,17 +121,12 @@ function ContextNavigator({ context, location: initialLocation = initialUrl, wra
     return (<NavigationContainer_1.NavigationContainer ref={store.navigationRef} initialState={store.initialState} linking={store.linking} onUnhandledAction={onUnhandledAction} documentTitle={{
             enabled: false,
         }}>
-      <serverContext_1.default.Provider value={serverContext}>
+      <serverLocationContext_1.default.Provider value={serverContext}>
         <WrapperComponent>
           <Component />
         </WrapperComponent>
-<<<<<<< HEAD
-      </serverContext_1.default.Provider>
-    </NavigationContainer_1.default>);
-=======
-      </serverLocationContext_1.ServerLocationContext.Provider>
+      </serverLocationContext_1.default.Provider>
     </NavigationContainer_1.NavigationContainer>);
->>>>>>> ad6fce7636a (update deps to react-navigation 7)
 }
 let onUnhandledAction;
 if (process.env.NODE_ENV !== 'production') {

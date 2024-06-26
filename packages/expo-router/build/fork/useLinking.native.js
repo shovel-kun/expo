@@ -117,7 +117,7 @@ function useLinking(ref, { enabled = true, prefixes, filter, config, getInitialU
                 if (typeof url !== 'string') {
                     return url.then((url) => {
                         const state = getStateFromURL(url);
-                        if (typeof url === 'string') {
+                        if (typeof url == 'string') {
                             // If the link were handled, it gets cleared in NavigationContainer
                             onUnhandledLinking((0, extractPathFromURL_1.extractExpoPathFromURL)(url));
                         }

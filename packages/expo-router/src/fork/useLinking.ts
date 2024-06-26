@@ -164,7 +164,7 @@ export function useLinking(
 
     if (enabledRef.current) {
       const location =
-        serverLocation ?? (typeof window !== 'undefined' ? window.location : undefined);
+        serverLocation?.location ?? (typeof window !== 'undefined' ? window.location : undefined);
 
       const path = location ? location.pathname + location.search : undefined;
 

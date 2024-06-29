@@ -14,6 +14,8 @@
 #import <jsi/JSCRuntime.h>
 #endif
 
+#import <react/bridging/Promise.h>
+
 #import <ExpoModulesCore/EXJavaScriptRuntime.h>
 #import <ExpoModulesCore/ExpoModulesHostObject.h>
 #import <ExpoModulesCore/EXJSIUtils.h>
@@ -145,6 +147,8 @@
         // Testing async functions is a bit more complicated anyway. See `init` description for more.
         throw jsi::JSError(runtime, "Calling async functions is not supported when the call invoker is unavailable");
       }
+      auto promise = react::AsyncPromise<jsi::Value>(runtime, callInvoker);
+
       // The function that is invoked as a setup of the EXJavaScript `Promise`.
       auto promiseSetup = [callInvoker, block, thisValue, arguments](jsi::Runtime &runtime, std::shared_ptr<Promise> promise) {
         expo::callPromiseSetupWithBlock(runtime, callInvoker, promise, ^(RCTPromiseResolveBlock resolver, RCTPromiseRejectBlock rejecter) {

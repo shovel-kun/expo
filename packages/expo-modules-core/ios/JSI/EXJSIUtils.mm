@@ -3,6 +3,7 @@
 #import <sstream>
 
 #import <React/RCTUtils.h>
+#import <react/bridging/Function.h>
 #import <ExpoModulesCore/EXJSIConversions.h>
 #import <ExpoModulesCore/EXJSIUtils.h>
 #import <ExpoModulesCore/JSIUtils.h>
@@ -10,6 +11,81 @@
 #import <ExpoModulesCore/EventEmitter.h>
 
 namespace expo {
+
+jsi::Value createPromise(jsi::Runtime &runtime, std::string methodName, PromiseInvocationBlock invoke) {
+  if (!invoke) {
+    return jsi::Value::undefined();
+  }
+
+  jsi::Function Promise = runtime.global().getPropertyAsFunction(runtime, "Promise");
+
+  // Note: the passed invoke() block is not retained by default, so let's retain it here to help keep it longer.
+  // Otherwise, there's a risk of it getting released before the promise function below executes.
+  PromiseInvocationBlock invokeCopy = [invoke copy];
+  return Promise.callAsConstructor(
+    runtime,
+    jsi::Function::createFromHostFunction(
+      runtime,
+      jsi::PropNameID::forAscii(runtime, "fn"),
+      2,
+      [invokeCopy, jsInvoker = jsInvoker_, moduleName = name_, methodName](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) {
+        std::string moduleMethod = moduleName + "." + methodName + "()";
+
+        if (count != 2) {
+          throw std::invalid_argument(moduleMethod + ": Promise must pass constructor function two args. Passed " + std::to_string(count) + " args.");
+        }
+        if (!invokeCopy) {
+          return jsi::Value::undefined();
+        }
+
+        __block BOOL resolveWasCalled = NO;
+        __block std::optional<AsyncCallback<>> resolve({rt, args[0].getObject(rt).getFunction(rt), std::move(jsInvoker)});
+        __block std::optional<AsyncCallback<>> reject({rt, args[1].getObject(rt).getFunction(rt), std::move(jsInvoker)});
+
+        RCTPromiseResolveBlock resolveBlock = ^(id result) {
+          if (!resolve || !reject) {
+            if (resolveWasCalled) {
+              RCTLogError(@"%s: Tried to resolve a promise more than once.", moduleMethod.c_str());
+            } else {
+              RCTLogError(@"%s: Tried to resolve a promise after it's already been rejected.", moduleMethod.c_str());
+            }
+            return;
+          }
+
+          resolve->call([result](jsi::Runtime &rt, jsi::Function &jsFunction) {
+            jsFunction.call(rt, convertObjCObjectToJSIValue(rt, result));
+          });
+
+          resolveWasCalled = YES;
+          resolve = std::nullopt;
+          reject = std::nullopt;
+        };
+
+        RCTPromiseRejectBlock rejectBlock = ^(NSString *code, NSString *message, NSError *error) {
+          if (!resolve || !reject) {
+            if (resolveWasCalled) {
+              RCTLogError(@"%s: Tried to reject a promise after it's already been resolved.", moduleMethod.c_str());
+            } else {
+              RCTLogError(@"%s: Tried to reject a promise more than once.", moduleMethod.c_str());
+            }
+            return;
+          }
+
+          NSDictionary *jsErrorDetails = RCTJSErrorFromCodeMessageAndNSError(code, message, error);
+          reject->call([jsErrorDetails](jsi::Runtime &rt, jsi::Function &jsFunction) {
+            jsFunction.call(rt, convertJSErrorDetailsToJSRuntimeError(rt, jsErrorDetails));
+          });
+          resolveWasCalled = NO;
+          resolve = std::nullopt;
+          reject = std::nullopt;
+        };
+
+        invokeCopy(resolveBlock, rejectBlock);
+        return jsi::Value::undefined();
+      }
+    )
+  );
+}
 
 void callPromiseSetupWithBlock(jsi::Runtime &runtime, std::shared_ptr<CallInvoker> jsInvoker, std::shared_ptr<Promise> promise, PromiseInvocationBlock setupBlock)
 {
